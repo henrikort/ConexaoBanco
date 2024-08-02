@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using aula30.Models;
 using aula30.Database;
+using System.Reflection.Metadata.Ecma335;
 
 namespace aula30.Controllers
 {
@@ -24,5 +25,37 @@ namespace aula30.Controllers
                 return new JsonResult(new { success = false, data = "Erro" });
             }
         }
+
+        [HttpGet]
+        [Route("get")]
+        public JsonResult Get(int id) 
+        {
+            ProductDB productDB = new ProductDB();
+            product product = productDB.get(id);
+
+            if (product != null && product.Id > 0)
+                return new JsonResult(new { success = true, data = product });
+
+            else
+                return new JsonResult(new { success = false, data = "erro" });
+             
+            
+            
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public JsonResult GetAll()
+        { 
+           ProductDB ProductDB = new ProductDB();
+            List<product> products = ProductDB.GetAll();
+
+            if (products.Count > 0)
+                return new JsonResult(new { success = true, data = products });
+            else return new JsonResult(new { success = false, data = products });
+        }
+
+
     }
+
 }

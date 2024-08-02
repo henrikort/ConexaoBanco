@@ -38,5 +38,77 @@ namespace aula30.Database
             }
             return result;
         }
+
+        public  product get (int id) 
+        {
+            product result = new product();
+            AccessDB db = new AccessDB();
+
+                try
+                {
+                using (NpgsqlCommand cmd = new NpgsqlCommand())
+                {
+                    cmd.CommandText = @"select * from products " + @"where id=@id;";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (cmd.Connection=db.OpenConnection())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read()) 
+                        {
+                            result.Id = Convert.ToInt32(reader["id"]);
+                            result.Name = reader["name"].ToString();
+                            result.Description = reader["description"].ToString();
+                            result.qtd = Convert.ToInt32(reader["qtd"]);
+                            result.price = float.Parse(reader["price"].ToString());
+                        }
+                    }
+
+                }
+                }
+                catch (Exception ex)
+                {
+                }
+
+                return result;
+            }
+
+        public List<product> GetAll()
+        { 
+          List<product> result = new List<product>();
+            AccessDB db = new AccessDB();
+
+            try
+            {
+                using (NpgsqlCommand cmd = new NpgsqlCommand())
+                {
+                    cmd.CommandText = @"select * from products;";
+
+                    using (cmd.Connection = db.OpenConnection())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            product product = new product();
+                            product.Id = Convert.ToInt32(reader["id"]);
+                            product.Name = reader["name"].ToString();
+                            product.Description = reader["description"].ToString();
+                            product.qtd = Convert.ToInt32(reader["qtd"]);
+                            product.price = float.Parse(reader["price"].ToString());
+                            result.Add(product);
+
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                
+            }
+            return result;
+        }
+        }
     }
-}
+
