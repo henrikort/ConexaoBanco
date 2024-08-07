@@ -55,6 +55,35 @@ namespace aula30.Controllers
             else return new JsonResult(new { success = false, data = products });
         }
 
+        [HttpPut]
+        [Route("update")]
+
+        public JsonResult update([FromBody] product product) 
+            {
+            ProductDB productDB = new ProductDB();
+            bool success = productDB.Update(product);
+
+            if (success)
+                return new JsonResult(new { success = true, data = "ALTERADO" });
+            else 
+                return new JsonResult(new { success = false, data = "erro" });
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+
+        public JsonResult Delete(int id) 
+        {
+           ProductDB productDB= new ProductDB();
+
+            bool success = productDB.Delete(id);
+
+            if (success)
+                return new JsonResult(new { success = true, data = "Excluido" });
+            else
+                return new JsonResult(new { success = false, data = "erro" });
+        }
+
 
     }
 

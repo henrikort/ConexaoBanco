@@ -109,6 +109,80 @@ namespace aula30.Database
             }
             return result;
         }
+
+
+        public bool Update(product product)
+        {
+            bool result = false;
+            AccessDB db = new AccessDB();
+
+            try
+            {
+                using(NpgsqlCommand cmd = new NpgsqlCommand())
+                {
+                    cmd.CommandText = @"UPDATE products " + @"SET name = @name, description = @description, " + @"qtd = @qtd, price = @price " + @"WHERE id = @id;";
+
+                    cmd.Parameters.AddWithValue("@id", product.Id);
+                    cmd.Parameters.AddWithValue("@name", product.Name);
+                    cmd.Parameters.AddWithValue("@description", product.Description);
+                    cmd.Parameters.AddWithValue("@qtd", product.qtd);
+                    cmd.Parameters.AddWithValue("@price", product.price);
+
+                    using(cmd.Connection = db.OpenConnection()) 
+                    {
+                        cmd.ExecuteNonQuery();
+                        result = true;
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            { }
+
+
+            return result;
+        }
+
+        public bool Delete(int id) 
+        {
+            bool result = false;
+            AccessDB db = new AccessDB();
+
+            try
+            {
+                using(NpgsqlCommand cmd = new NpgsqlCommand())
+                {
+                    cmd.CommandText = @"delete from products where id = @id;";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (cmd.Connection = db.OpenConnection())
+                    {
+                        cmd.ExecuteNonQuery();
+                        result = true;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            { }
+            
+            
+            
+            
+            
+            return result;
+        }
+
+
+
+
+
+
+
         }
     }
 
